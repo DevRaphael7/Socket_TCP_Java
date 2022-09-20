@@ -37,6 +37,7 @@ public class ClientServer extends Thread {
             this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             askNameOfNewClient();
+            Thread.sleep(10);
             initializaChat();
 
             this.closeSocket();

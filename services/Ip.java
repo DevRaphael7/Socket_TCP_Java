@@ -8,7 +8,17 @@ public class Ip {
     
     //Vai validar o ip, endereço do Protocolo de Internet.
     public static Boolean validatedIp(String endereco) {
-        String[] numbers = endereco.split("\\.");
+
+        InetAddress adress;
+
+        try {
+            adress = InetAddress.getByName(endereco);
+        } catch(Exception ex) {
+            System.out.println("Ip is invalid: " + ex.getMessage());
+            return false;
+        }
+
+        String[] numbers = adress.getHostAddress().split("\\.");
 
         if(numbers.length != 4){
             System.out.println(String.format("Endereço IP é inválido [ %s ]!", endereco));
