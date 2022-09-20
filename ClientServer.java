@@ -2,9 +2,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import models.Usuario;
+import services.Ip;
 
 public class ClientServer extends Thread {
 
@@ -12,14 +14,25 @@ public class ClientServer extends Thread {
     private PrintWriter out;
     private BufferedReader input;
     private Usuario user;
+    private InetSocketAddress socketAdress;
     
     public ClientServer(Socket socket) {
         this.socket = socket;
+        this.socketAdress = (InetSocketAddress) socket.getRemoteSocketAddress();
+        System.out.println("Novo dispositivo conectado: " + socket.getRemoteSocketAddress().toString());
     }
 
     @Override
     public void run() {
         try {
+
+            String ip = this.socketAdress.getAddress().toString();
+
+            if(!Ip.validatedIp(ip)){
+                this.socket.close();
+                return;
+            }
+
             this.out = new PrintWriter(socket.getOutputStream(), true);
             this.input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
